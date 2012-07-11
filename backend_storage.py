@@ -22,10 +22,10 @@ columns = [
 		"avgAoltage",
 		"avgAmperage",
 		"avgWattage",
-		"maxVolts",
-		"minVolts",
-		"maxAmps",
-		"minAmps"
+		"maxVoltage",
+		"minVoltage",
+		"maxAmperage",
+		"minAmperage"
 		]
 
 columnTypes = [
@@ -78,8 +78,8 @@ def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minW
 	if (backendType=="sqlite" or backendType=="both"):
 		print "Updating sqlite log:"
 		c = backends[sqlite].cursor()
-		queryString="INSERT INTO voltageLog (timestamp, sensor, voltage, amperage, wattage, maxVolts, minVolts, maxAmps, minAmps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-		print "queryString="+queryString
+		queryString="INSERT INTO voltageLog (timestamp, sensor, avgVoltage, avgAmperage, avgWattage, maxVoltage, minVoltage, maxAmperage, minAmperage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	#	print "queryString="+queryString
 		results=[ (time.strftime("%Y/%m/%d %H:%M:%S"), xb.address_16, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps) ]
 		c.executemany(queryString, results)
 
@@ -91,7 +91,7 @@ def flush_log(backends):
 	if (backendType=="flat" or backendType=="both"):
 		backends[logfile].flush()
 	if (backendType=="sqlite" or backendType=="both"):
-		backends[sqlite].commit
+		backends[sqlite].commit()
 
 def open_log():
 	global backendType
@@ -113,8 +113,8 @@ def open_log():
 
 def close_log(backends):
 	global backendType
+	flush_log(backends)
 	if (backendType=="flat" or backendType=="both"):
-		backends[logfile].flush()
 		backends[logfile].close()
 	if (backendType=="sqlite" or backendType=="both"):
 		sqlite_disconnect(backends[sqlite])

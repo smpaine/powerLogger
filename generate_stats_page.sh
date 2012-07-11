@@ -24,13 +24,17 @@ cd /usr/home/spaine/powerLogger
 /bin/mv home_voltage_average.png ${page_location}/home_voltage_average.png
 
 # Find maximum voltage from file
-MaxVoltage=`cut -f 1,6 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
+#MaxVoltage=`cut -f 1,6 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
+MaxVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxVoltage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
 # Find minimum voltage from file
-MinVoltage=`cut -f 1,7 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
+#MinVoltage=`cut -f 1,7 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
+MinVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minVoltage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
 # Find Maximum amperage from file
-MaxAmperage=`cut -f 1,8 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
+#MaxAmperage=`cut -f 1,8 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
+MaxAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxAmperage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
 # Find Minimum amperage from file
-MinAmperage=`cut -f 1,9 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
+#MinAmperage=`cut -f 1,9 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
+MinAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minAmperage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
 
 #echo "MaxVoltage=${MaxVoltage}"
 #echo "MinVoltage=${MinVoltage}"

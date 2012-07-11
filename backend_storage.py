@@ -19,9 +19,9 @@ import sqlite3, sys, getopt, time, datetime
 columns = [
 		"timestamp",
 		"sensor",
-		"voltage",
-		"amperage",
-		"wattage",
+		"avgAoltage",
+		"avgAmperage",
+		"avgWattage",
 		"maxVolts",
 		"minVolts",
 		"maxAmps",
@@ -57,7 +57,6 @@ def sqlite_connect():
 	return sqlite3.connect(sqliteFileName)
 
 def sqlite_disconnect(con):
-	con.commit()
 	con.close()
 
 def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb):
@@ -76,7 +75,6 @@ def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minW
 				str(longMinVolts)+"\t"+
 				str(longMaxAmps)+"\t"+
 				str(longMinAmps)+"\n")
-		flush_log(backends)
 	if (backendType=="sqlite" or backendType=="both"):
 		print "Updating sqlite log:"
 		c = backends[sqlite].cursor()
@@ -84,15 +82,16 @@ def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minW
 		print "queryString="+queryString
 		results=[ (time.strftime("%Y/%m/%d %H:%M:%S"), xb.address_16, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps) ]
 		c.executemany(queryString, results)
-		backends[sqlite].commit
-		print "committed input to database"
 
+	flush_log(backends)
 	temp="Wrote "+time.strftime("%Y/%m/%d %H:%M:%S")+"\t"+str(xb.address_16)+"\t"+str(longAvgVolts)+"\t"+str(longAvgAmps)+"\t"+str(longAvgWatts)+"\t"+str(longMaxVolts)+"\t"+str(longMinVolts)+"\t"+str(longMaxAmps)+"\t"+str(longMinAmps)+" to the log."
 	return temp
 
 def flush_log(backends):
 	if (backendType=="flat" or backendType=="both"):
 		backends[logfile].flush()
+	if (backendType=="sqlite" or backendType=="both"):
+		backends[sqlite].commit
 
 def open_log():
 	global backendType

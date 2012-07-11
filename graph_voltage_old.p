@@ -1,4 +1,4 @@
-# Gnuplot script file to plot datalog.dat
+# Gnuplot script file to plot 2012_june.dat
 set title "Home Voltage over Time (June 2012)"
 #set timefmt "%Y/%m/%d %H:%M:%S"
 set timefmt "%Y/%m/%d"
@@ -19,4 +19,5 @@ unset key
 set key on outside bottom center title "Key"
 show key
 #plot "2012_june.dat" using 1:4
-plot "2012_june.dat" using 1:4:xticlabels(1) title column(3)
+#plot "2012_june.dat" using 1:4:xticlabels(1) title column(3)
+plot "2012_june.dat" using 1:7:xticlabels(1) title column(6), "2012_june.dat" using 1:8:xticlabels(1) title column(7)

@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 import signal, sys, serial, time, datetime, sys, curses
 from xbee import xbee
+from backend_storage import open_log, write_changes, flush_log, close_log
 
 DEBUG = False
 
 if (sys.argv and len(sys.argv) > 1):
 	if sys.argv[1] == "-d":
 		DEBUG = True
-
-LOGFILENAME = "datalog.dat"	# where we will store our flatfile data
 
 SERIALPORT = "/dev/ttyU0"	# the com/serial port the XBee is connected to
 BAUDRATE = 9600				# the baud rate we talk to the xbee
@@ -55,34 +54,14 @@ ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.open()
 
 # open our datalogging file
-logfile = None
-try:
-	logfile = open(LOGFILENAME, 'r+')
-	logfile.seek(0, 2) # 2 == SEEK_END. ie, go to the end of the file
-except IOError:
-	# didn't exist yet
-	logfile = open(LOGFILENAME, 'w+')
-	logfile.write("Timestamp\tSensor\tVoltage\tAmperage\tWattage\tMaxVolts\tMinVolts\tMaxAmps\tMinAmps\n");
-	logfile.flush()
-	logfile.seek(0, 2) # 2 == SEEK_END. ie, go to the end of the file
+# open database/log file
+backends=open_log()
+logfile='yes'
 
 def write_to_log():
-	global maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, DEBUG, height, width, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb
-	longAvgVolts /= counter
-	longAvgAmps /= counter
-	longAvgWatts /= counter
-	#logfile.seek(0, 2) # 2 == SEEK_END. ie, go to the end of the file
-	logfile.write(time.strftime("%Y/%m/%d %H:%M:%S")+"\t"+
-			str(xb.address_16)+"\t"+
-			str(longAvgVolts)+"\t"+
-			str(longAvgAmps)+"\t"+
-			str(longAvgWatts)+"\t"+
-			str(longMaxVolts)+"\t"+
-			str(longMinVolts)+"\t"+
-			str(longMaxAmps)+"\t"+
-			str(longMinAmps)+"\n")
-	temp="Wrote "+time.strftime("%Y/%m/%d %H:%M:%S")+"\t"+str(xb.address_16)+"\t"+str(longAvgVolts)+"\t"+str(longAvgAmps)+"\t"+str(longAvgWatts)+"\t"+str(longMaxVolts)+"\t"+str(longMinVolts)+"\t"+str(longMaxAmps)+"\t"+str(longMinAmps)+" to the log."
-	logfile.flush()
+	global backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, DEBUG, height, width, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb
+	temp=write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb)
+	
 	counter=0
 	longAvgVolts = 0.0
 	longAvgAmps = 0.0
@@ -91,6 +70,7 @@ def write_to_log():
 	longMinVolts = 150.0
 	longMaxAmps = 0.0
 	longMinAmps = 15.5
+	
 	if DEBUG:
 		print temp
 		print "\tLog file flushed."
@@ -410,8 +390,8 @@ def on_exit():
 		print "Writing data to log..."
 		write_to_log()
 		print "Flushing log to disk..."
-		logfile.flush()
-		logfile.close()
+		flush_log(backends)
+		close_log(backends)
 		print "Done."
 	print "Exiting now."
 	if DEBUG:

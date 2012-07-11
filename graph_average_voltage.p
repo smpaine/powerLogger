@@ -1,5 +1,5 @@
 # Gnuplot script file to plot datalog.dat
-set title "Home Voltage over Time"
+set title "Average Home Voltage over Time"
 #set timefmt "%Y/%m/%d %H:%M:%S"
 set timefmt "%Y/%m/%d"
 set xdata time
@@ -14,10 +14,13 @@ set xtics in nomirror offset character 0,-5 rotate by 90
 #set format x "%Y/%m/%d %H:%M:%S"
 set format x "%Y/%m/%d"
 set terminal png
-set output "home_voltage.png"
+set output "home_voltage_average.png"
 unset key
 set key on outside bottom center title "Key"
 show key
 #plot "datalog.dat" using 1:4
 #plot "datalog.dat" using 1:4:xticlabels(1) title column(3)
-plot "datalog.dat" using 1:7:xticlabels(1) title column(6), "datalog.dat" using 1:8:xticlabels(1) title column(7)
+unset key
+set key on outside bottom center title "Key"
+show key
+plot "datalog.dat" using 1:4:xticlabels(1) title column(3)

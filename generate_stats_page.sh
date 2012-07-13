@@ -8,7 +8,7 @@ date=`date`
 cd /usr/home/spaine/powerLogger
 
 # Make voltage graph
-/usr/local/bin/gnuplot graph_voltage.p # 2>/dev/null
+/usr/local/bin/gnuplot graph_voltage.p 2>/dev/null
 # Set it up for web access
 /bin/chmod 755 home_voltage.png
 /usr/sbin/chown spaine:www home_voltage.png
@@ -16,7 +16,7 @@ cd /usr/home/spaine/powerLogger
 /bin/mv home_voltage.png ${page_location}/home_voltage.png
 
 # Make average voltage graph
-/usr/local/bin/gnuplot graph_average_voltage.p # 2>/dev/null
+/usr/local/bin/gnuplot graph_average_voltage.p 2>/dev/null
 # Set it up for web access
 /bin/chmod 755 home_voltage_average.png
 /usr/sbin/chown spaine:www home_voltage_average.png
@@ -25,16 +25,16 @@ cd /usr/home/spaine/powerLogger
 
 # Find maximum voltage from file
 #MaxVoltage=`cut -f 1,6 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
-MaxVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxVoltage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
+MaxVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxVoltage) FROM voltageLog' 2>/dev/null | tail -n 1 | tr '|' ' '`
 # Find minimum voltage from file
 #MinVoltage=`cut -f 1,7 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
-MinVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minVoltage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
+MinVoltage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minVoltage) FROM voltageLog' 2>/dev/null | tail -n 1 | tr '|' ' '`
 # Find Maximum amperage from file
 #MaxAmperage=`cut -f 1,8 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
-MaxAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxAmperage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
+MaxAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, max(maxAmperage) FROM voltageLog' 2>/dev/null | tail -n 1 | tr '|' ' '`
 # Find Minimum amperage from file
 #MinAmperage=`cut -f 1,9 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
-MinAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minAmperage) FROM voltageLog' | tail -n 1 | tr '|' ' '`
+MinAmperage=`/usr/local/bin/sqlite3 datalog.db 'SELECT timestamp, min(minAmperage) FROM voltageLog' 2>/dev/null | tail -n 1 | tr '|' ' '`
 
 #echo "MaxVoltage=${MaxVoltage}"
 #echo "MinVoltage=${MinVoltage}"

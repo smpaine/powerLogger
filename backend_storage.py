@@ -43,15 +43,16 @@ columnTypes = [
 flatFileName="datalog.dat"
 sqliteFileName="datalog.db"
 
-logfile=0
-sqlite=1
-
-backendType="both"
-
 # Default to flatfile unless initialized as one or the other
 #backendType="flat"
-#backendType="sqlite"
+backendType="sqlite"
 #backendType="both"
+
+logfile=0
+if (backendType=="sqlite"): 
+	sqlite=0
+else:
+	sqlite=1
 
 def sqlite_connect():
 	return sqlite3.connect(sqliteFileName)
@@ -80,7 +81,7 @@ def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minW
 		c = backends[sqlite].cursor()
 		queryString="INSERT INTO voltageLog (timestamp, sensor, avgVoltage, avgAmperage, avgWattage, maxVoltage, minVoltage, maxAmperage, minAmperage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 	#	print "queryString="+queryString
-		results=[ (time.strftime("%Y/%m/%d %H:%M:%S"), xb.address_16, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps) ]
+		results=[ (time.strftime("%Y-%m-%d %H:%M:%S"), xb.address_16, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps) ]
 		c.executemany(queryString, results)
 
 	flush_log(backends)

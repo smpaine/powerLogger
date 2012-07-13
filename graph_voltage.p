@@ -1,7 +1,7 @@
 # Gnuplot script file to plot datalog.dat
 set title "Home Voltage over Time"
 #set timefmt "%Y/%m/%d %H:%M:%S"
-set timefmt "%Y/%m/%d"
+set timefmt "%m/%d/%Y"
 set xdata time
 set xlabel "Date" offset character 0,-3
 set ylabel "Voltage (Volts AC)"
@@ -18,6 +18,5 @@ set output "home_voltage.png"
 unset key
 set key on outside bottom center title "Key"
 show key
-#plot "datalog.dat" using 1:4
-#plot "datalog.dat" using 1:4:xticlabels(1) title column(3)
-plot "datalog.dat" using 1:7:xticlabels(1) title column(6), "datalog.dat" using 1:8:xticlabels(1) title column(7)
+set datafile separator "|"
+plot "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', maxVoltage AS 'Maximum Voltage' FROM voltageLog\" | tail -n+3" using 1:2:xticlabels(1) title column(2) , "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', minVoltage AS 'Minimum Voltage' FROM voltageLog\" | tail -n+3" using 1:2:xticlabels(1) title column(2)

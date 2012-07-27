@@ -8,8 +8,8 @@ SERIALPORT = "/dev/ttyU0"	# the com/serial port the XBee is connected to
 BAUDRATE = 9600				# the baud rate we talk to the xbee
 CURRENTSENSE = 4			# which XBee ADC has current draw data
 VOLTSENSE = 0				# which XBee ADC has mains voltage data
-MAINSVPP = 185 * 2			# +-170V is what 120Vrms ends up being (= 120*2sqrt(2))
-# Except, it's wrong; so used 130Vrms to get voltage reading parity between kill a watt and sensor readings.
+MAINSVPP = 180 * 2			# +-170V is what 120 Vrms ends up being (= (120*2)/sqrt(2))
+# Except, it's wrong; so used ~127 Vrms to get voltage reading parity between kill a watt and sensor readings.
 vrefcalibration = [492,	# Calibration for sensor #0
 		498,		# Calibration for sensor #1
 		489,		# Calibration for sensor #2
@@ -19,7 +19,7 @@ vrefcalibration = [492,	# Calibration for sensor #0
 CURRENTNORM = 15.5	# conversion to amperes from ADC
 cycleLength = 18
 maxVolts = 0.0
-minVolts = 130.0
+minVolts = 150.0
 maxAmps = 0.0
 minAmps = 15.5
 maxWatts = 0.0

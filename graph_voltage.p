@@ -19,4 +19,4 @@ unset key
 set key on outside bottom center title "Key"
 show key
 set datafile separator "|"
-plot "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', maxVoltage AS 'Maximum Voltage' FROM voltageLog\" 2>/dev/null | tail -n+3" using 1:2:xticlabels(1) title column(2) , "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', minVoltage AS 'Minimum Voltage' FROM voltageLog\" 2>/dev/null | tail -n+3" using 1:2:xticlabels(1) title column(2)
+plot "< /usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', maxVoltage AS 'Maximum Voltage' FROM voltageLog\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2) , "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', minVoltage AS 'Minimum Voltage' FROM voltageLog\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2)

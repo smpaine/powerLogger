@@ -24,6 +24,8 @@ top='\036\n'
 # 037=31
 bot='\037\n'
 
+sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
+
 sleep ${INTERVAL}
 printf ${speed}
 printf ${setBright100}
@@ -57,7 +59,7 @@ do
 		#echo -n "  "
 		#/usr/games/fortune -s fortunes murphy startrek zippy
 		echo "Voltage at "
-		/usr/local/bin/sqlite3 datalog.db "SELECT max(id), strftime('%m/%d/%Y %H:%M:%S', timestamp), avgVoltage FROM voltageLog" 2>/dev/null | tail -n 1 | cut -d '|' -f 2- | tr '|' ' '
+		${sqlite} datalog.db "SELECT max(id), strftime('%m/%d/%Y %H:%M:%S', timestamp), avgVoltage FROM voltageLog" 2>/dev/null | tail -n 1 | cut -d '|' -f 2- | tr '|' ' '
 	fi
 
 	if [ ${counter} = ${INTERVAL4} ];

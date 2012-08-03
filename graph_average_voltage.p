@@ -24,4 +24,4 @@ unset key
 set key on outside bottom center title "Key"
 show key
 set datafile separator "|"
-plot "< /usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', avgVoltage AS 'Average Voltage' FROM voltageLog\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2)
+plot "< /usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', avgVoltage AS 'Average Voltage' FROM voltageLog WHERE strftime('%Y-%m', timestamp) = strftime('%Y-%m', 'now')\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2)

@@ -3,7 +3,7 @@ INTERVAL=1
 INTERVAL1=1
 INTERVAL2=0
 INTERVAL3=20
-INTERVAL4=60
+INTERVAL4=40
 counter=0
 # Octal characters!
 # Brightness 0=100%, 1=75%, 2=50%, 3=25%
@@ -42,19 +42,25 @@ do
 	date "+%m/%d/%Y %H:%M:%S"
 	if [ ${counter} = ${INTERVAL2} ];
 	then
-		printf ${clear}
-		printf ${setBright25}
+		#printf ${clear}
+		#printf ${setBright25}
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
 		printf ${bot}
+		echo "                                                                                                                                                                                                                                                             "
+		nanosleep 1
+		printf ${bot}
 		echo -n "   "
-		uptime | cut -d ' ' -f 4-8,11-
+		uptime | cut -d ' ' -f 4-9-
 	elif [ ${counter} = ${INTERVAL3} ];
 	then
-		printf ${clear}
-		printf ${setBright25}
+		#printf ${clear}
+		#printf ${setBright25}
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
+		printf ${bot}
+		echo "                                                                                                                                                                                                                                                             "
+		nanosleep 1
 		printf ${bot}
 		#echo -n "  "
 		#/usr/games/fortune -s fortunes murphy startrek zippy

@@ -78,6 +78,8 @@ cat > ${page_location}/${page_name} <<EOF
 				<img src="home_voltage_may_2012.png"></img><br>
 				<img src="home_voltage_june_2012.png"></img><br>
 				<img src="home_voltage_average_june_2012.png"></img><br>
+				<img src="home_voltage_july_2012.png"></img><br>
+				<img src="home_voltage_average_july_2012.png"></img><br>
 			</p>
 		</div>
 	</body>

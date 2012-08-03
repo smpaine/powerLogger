@@ -7,7 +7,7 @@
 # Run this file directly to create/initialize database
 #
 # Written by Stephen Paine (smpaine@gmail.com) 7/10/2012
-# Last update: 7/10/2012
+# Last update: 7/28/2012
 
 import sqlite3, sys, getopt, time, datetime
 
@@ -60,11 +60,17 @@ def sqlite_connect():
 def sqlite_disconnect(con):
 	con.close()
 
-def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb):
+def write_changes(backends, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb):
 	global backendType
 	longAvgVolts /= counter
 	longAvgAmps /= counter
 	longAvgWatts /= counter
+
+	if (longMaxVolts>150.0):
+		print "longMaxVolts > 150, using longAvgVolts (and longAvgAmps) instead."
+		longMaxVolts=longAvgVolts
+		longMaxAmps=longAvgAmps
+	
 	if (backendType=="flat" or backendType=="both"):
 		print "Updating flatfile log:"
 		backends[logfile].write(time.strftime("%Y/%m/%d %H:%M:%S")+"\t"+
@@ -76,6 +82,7 @@ def write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minW
 				str(longMinVolts)+"\t"+
 				str(longMaxAmps)+"\t"+
 				str(longMinAmps)+"\n")
+
 	if (backendType=="sqlite" or backendType=="both"):
 		print "Updating sqlite log:"
 		c = backends[sqlite].cursor()

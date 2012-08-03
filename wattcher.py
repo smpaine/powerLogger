@@ -59,8 +59,9 @@ backends=open_log()
 logfile='yes'
 
 def write_to_log():
-	global backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, DEBUG, height, width, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb
-	temp=write_changes(backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb)
+	#global backends, maxVolts, minVolts, maxAmps, minAmps, maxWatts, minWatts, DEBUG, height, width, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb
+	global backends, DEBUG, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb
+	temp=write_changes(backends, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb)
 	
 	counter=0
 	longAvgVolts = 0.0

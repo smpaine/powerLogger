@@ -8,11 +8,11 @@ powerLogger is a (heavily) modified version of the Tweet-a-Watt
 
 Major differences:
 ----
--Twitter part removed
--Added curses console output, which creates a nice, useful,
+1. Twitter part removed
+2.-Added curses console output, which creates a nice, useful,
  readible terminal output of incoming and averaged data
 (Voltage, Amperage, and Wattage).
--Added ability to log to either/both flatfile and sqlite db.
--Created gnuplot graph generation scripts.
--Created bash script to generate a stats page (put in cron job).
+3. Added ability to log to either/both flatfile and sqlite db.
+4. Created gnuplot graph generation scripts.
+5. Created bash script to generate a stats page (put in cron job).
 

@@ -42,25 +42,19 @@ do
 	date "+%m/%d/%Y %H:%M:%S"
 	if [ ${counter} = ${INTERVAL2} ];
 	then
-		#printf ${clear}
+		printf ${clear}
 		#printf ${setBright25}
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
-		printf ${bot}
-		echo "                                                                                                                                                                                                                                                             "
-		nanosleep 1
 		printf ${bot}
 		echo -n "   "
 		uptime | cut -d ' ' -f 4-9-
 	elif [ ${counter} = ${INTERVAL3} ];
 	then
-		#printf ${clear}
+		printf ${clear}
 		#printf ${setBright25}
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
-		printf ${bot}
-		echo "                                                                                                                                                                                                                                                             "
-		nanosleep 1
 		printf ${bot}
 		#echo -n "  "
 		#/usr/games/fortune -s fortunes murphy startrek zippy

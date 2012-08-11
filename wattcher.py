@@ -103,9 +103,6 @@ def update_log():
 		voltagedata[i] = xb.analog_samples[i][VOLTSENSE]
 		ampdata[i] = xb.analog_samples[i][CURRENTSENSE]
 
-	if DEBUG:
-		print "ampdata: "+str(ampdata)
-		print "voltdata: "+str(voltagedata)
 	# get max and min voltage and normalize the curve to '0'
 	# to make the graph 'AC coupled' / signed
 	min_v = 1024     # XBee ADC is 10 bits, so max value is 1023
@@ -152,6 +149,11 @@ def update_log():
 	wattdata = [0] * len(voltagedata)
 	for i in range(len(wattdata)):
 		wattdata[i] = voltagedata[i] * ampdata[i]
+
+	if DEBUG:
+		print "voltdata: "+str(voltagedata)
+		print "ampdata: "+str(ampdata)
+		print "wattdata: "+str(wattdata)
 
 	avgvolts = 0
 	#for i in range(len(voltagedata)):
@@ -339,7 +341,7 @@ def update_log():
 				scr.addstr(22,x+30,'*')
 
 		for x in range(len(wattdata)):
-			y=wattdata[x]
+			y=abs(wattdata[x])
 			if (y>1687.5):
 				scr.addstr(13,x+54,'*')
 			elif (y>1500):

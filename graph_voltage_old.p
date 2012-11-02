@@ -1,5 +1,5 @@
-# Gnuplot script file to plot 2012_july.dat
-set title "Home Voltage over Time (July 2012)"
+# Gnuplot script file to plot 2012_october.dat
+set title "Home Voltage over Time (October 2012)"
 #set timefmt "%Y/%m/%d %H:%M:%S"
 set timefmt "%Y/%m/%d"
 set xdata time
@@ -14,12 +14,12 @@ set xtics in nomirror offset character 0,-5 rotate by 90
 #set format x "%Y/%m/%d %H:%M:%S"
 set format x "%Y/%m/%d"
 set terminal png
-set output "home_voltage_july_2012.png"
+set output "home_voltage_october_2012.png"
 unset key
 set key on outside bottom center title "Key"
 show key
-#plot "2012_july.dat" using 1:4
-#plot "2012_july.dat" using 1:4:xticlabels(1) title column(3)
-#plot "2012_july.dat" using 1:7:xticlabels(1) title column(6), "2012_july.dat" using 1:8:xticlabels(1) title column(7)
+#plot "2012_october.dat" using 1:4
+#plot "2012_october.dat" using 1:4:xticlabels(1) title column(3)
+#plot "2012_october.dat" using 1:7:xticlabels(1) title column(6), "2012_october.dat" using 1:8:xticlabels(1) title column(7)
 set datafile separator "|"
-plot "< /usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', maxVoltage AS 'Maximum Voltage' FROM voltageLog WHERE timestamp >='2012-07-01 00:00:00' AND timestamp < '2012-08-01 00:00:00' \" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2) , "< /usr/local/bin/sqlite3 datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', minVoltage AS 'Minimum Voltage' FROM voltageLog WHERE timestamp >='2012-07-01 00:00:00' AND timestamp < '2012-08-01 00:00:00'\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2)
+plot "< /Users/spaine/bin/sqlite3 -init /Users/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', maxVoltage AS 'Maximum Voltage' FROM voltageLog WHERE timestamp >='2012-10-01 00:00:00' AND timestamp < '2012-11-01 00:00:00' \" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2) , "< /Users/spaine/bin/sqlite3 -init /Users/spaine/.sqliterc datalog.db \"SELECT strftime('%m/%d/%Y',timestamp) AS 'Date', minVoltage AS 'Minimum Voltage' FROM voltageLog WHERE timestamp >='2012-10-01 00:00:00' AND timestamp < '2012-11-01 00:00:00'\" 2>/dev/null | sed '/^$/d' | tail -n+2" using 1:2:xticlabels(1) title column(2)

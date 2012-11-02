@@ -1,29 +1,35 @@
 #!/bin/sh
-
-page_location="/usr/home/spaine/public_html/voltageLog"
+script_location="/Users/spaine/powerLogger"
+#script_location="/usr/home/spaine/powerLogger"
+#page_location="/usr/home/spaine/public_html/voltageLog"
+page_location="/Users/spaine/public_html/voltageLog"
 page_name="home_voltage.html"
+prevMonths="/Users/spaine/public_html/voltageLog/previousMonths"
 
 date=`date`
 
-sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
+#sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
+sqlite="/Users/spaine/bin/sqlite3 -init /Users/spaine/.sqliterc"
 
-cd /usr/home/spaine/powerLogger
+gnuplot="/usr/local/bin/gnuplot"
+
+cd ${script_location}
 
 # Make voltage graph
-/usr/local/bin/gnuplot graph_voltage.p 2>/dev/null
+${gnuplot} graph_voltage.p 2>/dev/null
 # Set it up for web access
-/bin/chmod 755 home_voltage.png
-/usr/sbin/chown spaine:www home_voltage.png
+chmod 755 home_voltage.png
+#chown spaine:www home_voltage.png
 # Move it to web folder
-/bin/mv home_voltage.png ${page_location}/home_voltage.png
+mv home_voltage.png ${page_location}/home_voltage.png
 
 # Make average voltage graph
-/usr/local/bin/gnuplot graph_average_voltage.p 2>/dev/null
+${gnuplot} graph_average_voltage.p 2>/dev/null
 # Set it up for web access
-/bin/chmod 755 home_voltage_average.png
-/usr/sbin/chown spaine:www home_voltage_average.png
+chmod 755 home_voltage_average.png
+#chown spaine:www home_voltage_average.png
 # Move it to web folder
-/bin/mv home_voltage_average.png ${page_location}/home_voltage_average.png
+mv home_voltage_average.png ${page_location}/home_voltage_average.png
 
 # Find maximum voltage from file
 #MaxVoltage=`cut -f 1,6 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
@@ -74,15 +80,18 @@ cat > ${page_location}/${page_name} <<EOF
 			<br>
 			<p>
 				<strong>Previous Month's Graphs</strong><br>
-				<img src="home_voltage_april_2012.png"></img><br>
-				<img src="home_voltage_may_2012.png"></img><br>
-				<img src="home_voltage_june_2012.png"></img><br>
-				<img src="home_voltage_average_june_2012.png"></img><br>
-				<img src="home_voltage_july_2012.png"></img><br>
-				<img src="home_voltage_average_july_2012.png"></img><br>
+EOF
+
+cd ${prevMonths}
+for file in `ls -rt *.html`; do
+	linkName=${file/home_voltage_/}
+	linkName=${linkName/.html/}
+	echo "<a href=\"previousMonths/${file}\">${linkName}</a><br>\n" >> ${page_location}/${page_name}
+done
+
+cat >> ${page_location}/${page_name} <<EOF
 			</p>
 		</div>
 	</body>
 </html>
 EOF
-

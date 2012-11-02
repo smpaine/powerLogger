@@ -8,7 +8,7 @@ SERIALPORT = "/dev/ttyU0"	# the com/serial port the XBee is connected to
 BAUDRATE = 9600				# the baud rate we talk to the xbee
 CURRENTSENSE = 4			# which XBee ADC has current draw data
 VOLTSENSE = 0				# which XBee ADC has mains voltage data
-MAINSVPP = 180 * 2			# +-170V is what 120 Vrms ends up being (= (120*2)/sqrt(2))
+MAINSVPP = 183 * 2			# +-170V is what 120 Vrms ends up being (= (120*2)/sqrt(2))
 # Except, it's wrong; so used ~127 Vrms to get voltage reading parity between kill a watt and sensor readings.
 vrefcalibration = [492,	# Calibration for sensor #0
 		498,		# Calibration for sensor #1
@@ -60,13 +60,9 @@ def update_log():
 	print "voltdata: "+str(voltagedata)
 	# get max and min voltage and normalize the curve to '0'
 	# to make the graph 'AC coupled' / signed
-	min_v = 1024     # XBee ADC is 10 bits, so max value is 1023
-	max_v = 0
-	for i in range(len(voltagedata)):
-		if (min_v > voltagedata[i]):
-			min_v = voltagedata[i]
-		if (max_v < voltagedata[i]):
-			max_v = voltagedata[i]
+	max_v=max(voltagedata)
+	min_v=min(voltagedata)
+
 	# figure out the 'average' of the max and min readings
 	avgv = (max_v + min_v) / 2
 	# also calculate the peak to peak measurements
@@ -77,7 +73,7 @@ def update_log():
 		voltagedata[i] -= avgv
 		# We know that the mains voltage is 120Vrms = +-170Vpp
 		voltagedata[i] = (voltagedata[i] * MAINSVPP) / vpp
-	
+
 	if DEBUG:
 		print "min_v="+str(min_v)
 		print "max_v="+str(max_v)
@@ -90,10 +86,11 @@ def update_log():
 		# VREF is the hardcoded 'DC bias' value, its
 		# about 492 but would be nice if we could somehow
 		# get this data once in a while maybe using xbeeAPI
-		if vrefcalibration[xb.address_16]:
-			ampdata[i] -= vrefcalibration[xb.address_16]
-		else:
-			ampdata[i] -= vrefcalibration[0]
+		#if vrefcalibration[xb.address_16]:
+		#	ampdata[i] -= vrefcalibration[xb.address_16]
+		#else:
+		#	ampdata[i] -= vrefcalibration[0]
+		ampdata[i] -= avgv
 		# the CURRENTNORM is our normalizing constant
 		# that converts the ADC reading to Amperes
 		ampdata[i] /= CURRENTNORM

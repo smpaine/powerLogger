@@ -24,7 +24,8 @@ top='\036\n'
 # 037=31
 bot='\037\n'
 
-sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
+#sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
+sqlite="/usr/bin/sqlite3 -init /Users/spaine/.sqliterc"
 
 sleep ${INTERVAL}
 printf ${speed}
@@ -47,8 +48,11 @@ do
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
 		printf ${bot}
-		echo -n "   "
-		uptime | cut -d ' ' -f 4-9-
+		echo "   "
+		# FreeeBSD
+		#uptime | cut -d ' ' -f 4-9-
+		# Mac OS
+		uptime | cut -d ' ' -f 3-
 	elif [ ${counter} = ${INTERVAL3} ];
 	then
 		printf ${clear}

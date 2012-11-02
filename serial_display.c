@@ -7,7 +7,8 @@
 
 #define ERROR		//Display error messages
 //#define DEBUG		//Display debug messages
-#define DISPLAY "/dev/cuaU1"
+//#define DISPLAY "/dev/cuaU1"
+#define DISPLAY "/dev/cu.usbserial-A900frrf"
 
 void process_buffer(int displayfd, char *loc, int *size);
 void write_to_display(int displayfd, char *loc, int size);

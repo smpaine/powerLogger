@@ -13,7 +13,8 @@ else
 	#exit 1
 	year=`date -v-1m "+%Y"`
 	month=`date -v-1m "+%m"`
-	date="${1}-${2}"
+	date="${year}-${month}"
+	echo "Using date ${date}"
 fi
 
 case ${month} in

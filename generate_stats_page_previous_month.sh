@@ -75,7 +75,6 @@ gnuplot="/usr/local/bin/gnuplot"
 
 cd ${script_location}
 
-# Assume I already made previous months graphs; later - create gnuplot template to substitute in variables
 # Make voltage graph
 ${gnuplot} << EOF
 set title "Home Voltage over Time (${month_name} ${year})"

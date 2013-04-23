@@ -41,6 +41,7 @@ while [ true ]
 do
 	printf ${top}
 	date "+%m/%d/%Y %H:%M:%S"
+
 	if [ ${counter} = ${INTERVAL2} ];
 	then
 		printf ${clear}
@@ -48,22 +49,23 @@ do
 		printf ${top}
 		date "+%m/%d/%Y %H:%M:%S"
 		printf ${bot}
-		echo "   "
+		#echo "   "
 		# FreeeBSD
 		#uptime | cut -d ' ' -f 4-9-
 		# Mac OS
-		uptime | cut -d ' ' -f 3-
+		#uptime | cut -d ' ' -f 3-
+		uptime | cut -d ' ' -f 4-7 | cut -d ',' -f 1-2
 	elif [ ${counter} = ${INTERVAL3} ];
 	then
 		printf ${clear}
 		#printf ${setBright25}
-		printf ${top}
-		date "+%m/%d/%Y %H:%M:%S"
 		printf ${bot}
 		#echo -n "  "
 		#/usr/games/fortune -s fortunes murphy startrek zippy
 		echo "Voltage at "
 		${sqlite} datalog.db "SELECT max(id), strftime('%m/%d/%Y %H:%M:%S', timestamp), avgVoltage FROM voltageLog" 2>/dev/null | tail -n 1 | cut -d '|' -f 2- | tr '|' ' '
+		printf ${top}
+		date "+%m/%d/%Y %H:%M:%S"
 	fi
 
 	if [ ${counter} = ${INTERVAL4} ];

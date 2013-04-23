@@ -11,7 +11,7 @@ date=`date`
 #sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
 sqlite="/Users/spaine/bin/sqlite3 -init /Users/spaine/.sqliterc"
 
-gnuplot="/usr/local/bin/gnuplot"
+gnuplot="/opt/local/bin/gnuplot"
 
 cd ${script_location}
 
@@ -31,6 +31,10 @@ chmod 755 home_voltage_average.png
 # Move it to web folder
 mv home_voltage_average.png ${page_location}/home_voltage_average.png
 
+# Find most recent average voltage from file
+LastVoltage=`${sqlite} datalog.db 'SELECT timestamp, avgVoltage FROM voltageLog order by timestamp desc limit 1' 2>/dev/null | tail -n 1 | tr '|' ' '`
+# Find most recent average amperage from file
+LastAmperage=`${sqlite} datalog.db 'SELECT timestamp, avgAmperage FROM voltageLog order by timestamp desc limit 1' 2>/dev/null | tail -n 1 | tr '|' ' '`
 # Find maximum voltage from file
 #MaxVoltage=`cut -f 1,6 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n -r +2 | head -n 1`
 MaxVoltage=`${sqlite} datalog.db 'SELECT timestamp, max(maxVoltage) FROM voltageLog WHERE strftime("%Y-%m", timestamp) = strftime("%Y-%m", "now", "localtime")' 2>/dev/null | tail -n 1 | tr '|' ' '`
@@ -44,6 +48,8 @@ MaxAmperage=`${sqlite} datalog.db 'SELECT timestamp, max(maxAmperage) FROM volta
 #MinAmperage=`cut -f 1,9 datalog.dat | awk '{ if (($3!="")) {print($1" "$2"    "$3)} }' | sort -t' ' -n +2 | head -n 1`
 MinAmperage=`${sqlite} datalog.db 'SELECT timestamp, min(minAmperage) FROM voltageLog WHERE strftime("%Y-%m", timestamp) = strftime("%Y-%m", "now", "localtime")' 2>/dev/null | tail -n 1 | tr '|' ' '`
 
+echo "LastVoltage=${LastVoltage}"
+echo "LastAmperage=${LastAmperage}"
 echo "MaxVoltage=${MaxVoltage}"
 echo "MinVoltage=${MinVoltage}"
 echo "MaxAmperage=${MaxAmperage}"
@@ -60,6 +66,14 @@ cat > ${page_location}/${page_name} <<EOF
 			<img src="home_voltage_average.png" alt="average home voltage graph"></img>
 			<br><br>
 			<table width="500" border="1" cellpadding="10">
+				<tr>
+					<td align="right">Last Voltage</td>
+					<td align="left">${LastVoltage}</td>
+				</tr>
+				<tr>
+					<td align="right">Last Amperage</td>
+					<td align="left">${LastAmperage}</td>
+				</tr>
 				<tr>
 					<td align="right">Maximum Voltage</td>
 					<td align="left">${MaxVoltage}</td>

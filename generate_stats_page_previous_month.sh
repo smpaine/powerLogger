@@ -71,7 +71,7 @@ echo "Making previous month stats page for ${month_name}, ${year}."
 #sqlite="/usr/local/bin/sqlite3 -init /usr/home/spaine/.sqliterc"
 sqlite="/Users/spaine/bin/sqlite3 -init /Users/spaine/.sqliterc"
 
-gnuplot="/usr/local/bin/gnuplot"
+gnuplot="/opt/local/bin/gnuplot"
 
 cd ${script_location}
 

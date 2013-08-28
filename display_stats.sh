@@ -53,8 +53,8 @@ do
 		# FreeeBSD
 		#uptime | cut -d ' ' -f 4-9-
 		# Mac OS
-		#uptime | cut -d ' ' -f 3-
-		uptime | cut -d ' ' -f 4-7 | cut -d ',' -f 1-2
+		uptime | cut -d ' ' -f 3-
+		#uptime | cut -d ' ' -f 4-7 | cut -d ',' -f 1-2
 	elif [ ${counter} = ${INTERVAL3} ];
 	then
 		printf ${clear}

@@ -56,14 +56,24 @@ echo "MaxAmperage=${MaxAmperage}"
 echo "MinAmperage=${MinAmperage}"
 
 cat > ${page_location}/${page_name} <<EOF
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head><title>Home Voltage Statistics</title></head>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta http-equiv="content-language" content="en-US">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta name="description" content="Home Voltage Graphical Log">
+		<meta name="copyright" content="&copy; 2013 Stephen Paine">
+		<meta http-equiv="expires" content="0">
+		<title>Home Voltage Statistics</title>
+	</head>
 	<body>
 		<div align="center">
 			<h2>Home Voltage Statistical Information</h2>
 			<h4>Generated on ${date}</h4>
-			<img src="home_voltage.png" alt="home voltage graph"></img>
-			<img src="home_voltage_average.png" alt="average home voltage graph"></img>
+			<img src="home_voltage.png" alt="home voltage graph">
+			<img src="home_voltage_average.png" alt="average home voltage graph">
 			<br><br>
 			<table width="500" border="1" cellpadding="10">
 				<tr>
@@ -104,6 +114,13 @@ for file in `ls -rt *.html`; do
 done
 
 cat >> ${page_location}/${page_name} <<EOF
+			</p>
+		</div>
+		<div align="left">
+			<p>
+				<a href="http://validator.w3.org/check?uri=referer">
+					<img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict" height="31" width="88">
+				</a>
 			</p>
 		</div>
 	</body>

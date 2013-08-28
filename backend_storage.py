@@ -62,6 +62,9 @@ def sqlite_disconnect(con):
 
 def write_changes(backends, counter, longAvgVolts, longAvgAmps, longAvgWatts, longMaxVolts, longMinVolts, longMaxAmps, longMinAmps, xb):
 	global backendType
+	if (counter < 1):
+		return
+
 	longAvgVolts /= counter
 	longAvgAmps /= counter
 	longAvgWatts /= counter

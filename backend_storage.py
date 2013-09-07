@@ -19,7 +19,7 @@ import sqlite3, sys, getopt, time, datetime
 columns = [
 		"timestamp",
 		"sensor",
-		"avgAoltage",
+		"avgVoltage",
 		"avgAmperage",
 		"avgWattage",
 		"maxVoltage",

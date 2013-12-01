@@ -224,7 +224,7 @@ cd ${prevMonths}
 currentYear="0";
 counter=0;
 
-echo "<div align=\"left\" width=\"100px\"><ul class=\"collapsibleList\"><strong>Previous Month's Graphs</strong>\n" >> ${page_location}/${page_name};
+echo "<div align=\"left\"><ul class=\"treeView\"><li><strong>Previous Month's Graphs</strong><ul class=\"collapsibleList\">\n" >> ${page_location}/${page_name};
 
 for file in `/bin/ls -rt *.html`; do
 	linkName="${file/home_voltage_/}";
@@ -247,10 +247,9 @@ for file in `/bin/ls -rt *.html`; do
 done
 
 echo "	</ul></li>\n" >> ${page_location}/${page_name};
-echo "</ul></div>\n" >> ${page_location}/${page_name};
+echo "</ul></li></ul></div>\n" >> ${page_location}/${page_name};
 
 cat >> ${page_location}/${page_name} <<EOF
-			</p>
 		</div>
 		<div align="left">
 			<p>

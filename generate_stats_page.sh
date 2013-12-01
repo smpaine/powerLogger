@@ -67,6 +67,122 @@ cat > ${page_location}/${page_name} <<EOF
 		<meta name="copyright" content="&copy; 2013 Stephen Paine">
 		<meta http-equiv="expires" content="0">
 		<title>Home Voltage Statistics</title>
+		<style type="text/css">
+			.treeView{
+				-moz-user-select:none;
+				position:relative;
+			}
+
+			.treeView ul{
+				margin:0 0 0 -1.5em;
+				padding:0 0 0 1.5em;
+			}
+
+			.treeView ul ul{
+				background:url('list-item-contents.png') repeat-y left;
+			}
+
+			.treeView li.lastChild > ul{
+				background-image:none;
+			}
+
+			.treeView li{
+				margin:0;
+				padding:0;
+				background:url('list-item-root.png') no-repeat top left;
+				list-style-position:inside;
+				list-style-image:url('button.png');
+				cursor:auto;
+			}
+
+			.treeView li.treeViewOpen{
+				list-style-image:url('button-open.png');
+				cursor:pointer;
+			}
+
+			.treeView li.treeViewClosed{
+				list-style-image:url('button-closed.png');
+				cursor:pointer;
+			}
+
+			.treeView li li{
+				background-image:url('list-item.png');
+				padding-left:1.5em;
+			}
+
+			.treeView li.lastChild{
+				background-image:url('list-item-last.png');
+			}
+
+			.treeView li.treeViewOpen{
+				background-image:url('list-item-open.png');
+			}
+
+			.treeView li.treeViewOpen.lastChild{
+				background-image:url('list-item-last-open.png');
+			}
+
+			.collapsibleList{
+				-moz-user-select:none;
+				position:relative;
+			}
+
+			.collapsibleList ul{
+				margin:0 0 0 -1.5em;
+				padding:0 0 0 1.5em;
+			}
+
+			.collapsibleList ul ul{
+				background:url('list-item-contents.png') repeat-y left;
+			}
+
+			.collapsibleList li.lastChild > ul{
+				background-image:none;
+			}
+
+			.collapsibleList li{
+				margin:0;
+				padding:0;
+				background:url('list-item-root.png') no-repeat top left;
+				list-style-position:inside;
+				list-style-image:url('button.png');
+				cursor:auto;
+			}
+
+			.collapsibleList li.collapsibleListOpen{
+				list-style-image:url('button-open.png');
+				cursor:pointer;
+			}
+
+			.collapsibleList li.collapsibleListClosed{
+				list-style-image:url('button-closed.png');
+				cursor:pointer;
+			}
+
+			.collapsibleList li li{
+				background-image:url('list-item.png');
+				padding-left:1.5em;
+			}
+
+			.collapsibleList li.lastChild{
+				background-image:url('list-item-last.png');
+			}
+
+			.collapsibleList li.collapsibleListOpen{
+				background-image:url('list-item-open.png');
+			}
+
+			.collapsibleList li.collapsibleListOpen.lastChild{
+				background-image:url('list-item-last-open.png');
+			}
+		</style>
+		<script type="text/javascript" src="CollapsibleLists.js"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				// make the appropriate lists collapsible
+				CollapsibleLists.apply();
+			};
+		</script>
 	</head>
 	<body>
 		<div align="center">
@@ -102,16 +218,36 @@ cat > ${page_location}/${page_name} <<EOF
 				</tr>
 			</table>
 			<br>
-			<p>
-				<strong>Previous Month's Graphs</strong><br>
 EOF
 
 cd ${prevMonths}
-for file in `ls -rt *.html`; do
-	linkName=${file/home_voltage_/}
-	linkName=${linkName/.html/}
-	echo "<a href=\"previousMonths/${file}\">${linkName}</a><br>\n" >> ${page_location}/${page_name}
+currentYear="0";
+counter=0;
+
+echo "<div align=\"left\" width=\"100px\"><ul class=\"collapsibleList\"><strong>Previous Month's Graphs</strong>\n" >> ${page_location}/${page_name};
+
+for file in `/bin/ls -rt *.html`; do
+	linkName="${file/home_voltage_/}";
+	linkName="${linkName/.html/}";
+	linkYear=`echo ${linkName} | sed 's:[A-Za-z_]*::g'`;
+	echo "currentYear=${currentYear}";
+	echo "linkYear=${linkYear}";
+	if [ "${currentYear}" != "0" -a "${currentYear}" != "${linkYear}" ]; then
+		# close previous <li>
+		echo "	</ul></li>\n" >> ${page_location}/${page_name};
+	fi
+
+	if [ "${currentYear}" != "${linkYear}" ]; then
+		currentYear="${linkYear}";
+		counter=$((counter + 1));
+		echo "	<li>${currentYear}<ul>\n" >> ${page_location}/${page_name};
+	fi
+
+	echo "			<li><a href=\"previousMonths/${file}\">${linkName}</a><br></li>\n" >> ${page_location}/${page_name}
 done
+
+echo "	</ul></li>\n" >> ${page_location}/${page_name};
+echo "</ul></div>\n" >> ${page_location}/${page_name};
 
 cat >> ${page_location}/${page_name} <<EOF
 			</p>
